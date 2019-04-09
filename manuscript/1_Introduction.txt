@@ -1,0 +1,39 @@
+# Introduction
+[Flask](http://flask.pocoo.org/) is a Python micro webframework with minimalistic design, with no database abstraction layer, form validation, etc. Even Python beginners could pick up Flask in no time. Nevertheless, Flask supports many third-party extensions, allowing developers to build full-fledged web applications. Companies such as Pinterest, and LinkedIn use Flask for the applications.
+
+## Setup
+Install [Python](https://www.python.org/). Python 3.5+ is recommended.
+Create a virtualenv for the project (this is included with Python 3.5+)
+{format: bash, line-numbers: false}
+```
+virtualenv venv
+source venv/bin/activate
+```
+Install Flask
+{format: bash, line-numbers: false}
+```
+pip install Flask
+```
+
+## Hello World Application
+Create a minimal Flask app with the file `app.py` in your favorite editor
+{format: ruby, line-numbers: false, caption: "app.py"}
+```
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+```
+Here we create a Flask app instance, and an index route (`/` or `/index`) which returns a simple string.
+Run the app with
+{format: bash, line-numbers: false}
+```
+FLASK_APP=app.py flask run
+```
+Visit <http://127.0.0.1:5000/>, you should the hello world text displayed.
+![](images/1_hello_world.png)
+I> ### Port number
+I> The default port number for Flask is 5000.
+I> You can specify different port, such as 8000, by using `FLASK_APP=app.py flask run -p 8000`
