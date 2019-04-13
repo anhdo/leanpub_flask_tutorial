@@ -17,7 +17,7 @@ pip install Flask
 
 ## Hello World Application
 Create a minimal Flask app with the file `app.py` in your favorite editor
-{format: ruby, line-numbers: false, caption: "app.py"}
+{format: python, line-numbers: false, caption: "app.py"}
 ```
 from flask import Flask
 app = Flask(__name__)
@@ -34,6 +34,17 @@ FLASK_APP=app.py flask run
 ```
 Visit <http://127.0.0.1:5000/>, you should the hello world text displayed.
 ![](images/1_hello_world.png)
-I> ### Port number
-I> The default port number for Flask is 5000.
-I> You can specify different port, such as 8000, by using `FLASK_APP=app.py flask run -p 8000`
+
+## Developer notes
+The default port number for Flask is 5000. You can specify different port, such as 8000, with
+{format: bash, line-numbers: false}
+```
+FLASK_APP=app.py flask run -p 8000
+```
+
+During development, it is useful to run Flask with debug mode. The server restarts whenever you make code changes, and the traceback will be displayed in the browser whenever an error occurs.
+{format: bash, line-numbers: false}
+```
+FLASK_APP=app.py FLASK_DEBUG=1 flask run
+```
+![](images/1_traceback.png)

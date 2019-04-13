@@ -1,0 +1,13 @@
+<p>My text is {{ text }}</p>
+<p>My text length is {{ text | length }}</p>
+<p>My number is{{ number }}</p>
+<p>My number doubled is {{ number * 2 }}</p>
+
+<p>Name: {{ user.name }}. Age: {{ user.age }}<p>
+<p>Name: {{ user['name'] }}. Age: {{ user['age'] }}<p>
+
+<ul>
+	{% for item in shopping_list %}
+        <li>{{ item }}</li>
+    {% endfor %}
+</ul>
