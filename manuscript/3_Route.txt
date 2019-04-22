@@ -1,0 +1,144 @@
+# Route
+
+The application routes can be defined by functions with decorators of `@app.route` (`app` is the Flask app instance)
+
+## Static route
+
+Each static route is defined with a function with no parameter. The function name should be unique, but does NOT have to be equal or similar to the route.
+
+{format: python, line-numbers: false, caption: "app.py"}
+```
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/hello')
+def hello():
+	return 'Hello'
+```
+![](images/3_static_route.png)
+
+By default, the route returns HTTP status code 200.
+
+## Parameterized route
+
+Each route can contain 1 or several parameters, which specific in the route using the angle brackets or chevrons (`<>`).
+
+{format: python, line-numbers: false, caption: "app.py"}
+```
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/hello/<name>')
+def specific_hello(name):
+	return 'Hello {}'.format(name)
+```
+![](images/3_dynamic_route.png)
+
+Converter can also be added to the parameter definition to convert string input to integer for example
+
+{format: python, line-numbers: false, caption: "app.py"}
+```
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/double/<int:num>')
+def double(num):
+	return 'Double of {} is {}'.format(num, num*2)
+```
+![](images/3_converter.png)
+
+## Redirect
+
+Flask has a `redirect` function, which redirects to another route
+
+{format: python, line-numbers: false, caption: "app.py"}
+```
+from flask import Flask
+from flask import redirect
+app = Flask(__name__)
+
+@app.route('/hello')
+def hello():
+	return 'Hello'
+
+@app.route('/old_hello')
+def old_hello():
+	redirect('/hello')
+```
+
+The redirect route returns HTTP status code 302.
+
+# Custom HTTP code
+
+{format: python, line-numbers: false, caption: "app.py"}
+```
+from flask import Flask
+from flask import redirect
+app = Flask(__name__)
+
+@app.route('/custom_code')
+def custom_code():
+	return 'custom code', 201
+```
+
+## Developer notes
+Please refer to [this documentation](http://flask.pocoo.org/docs/1.0/quickstart/#routing) for more information. 
+
+## Testing
+
+[TDD](https://en.wikipedia.org/wiki/Test-driven_development) (test-driven development) is highly recommended for not only Flask but also software development in general. Even though the testing section will be at the end of each lesson, please remember to always write tests first in actual development. It will save a lot headaches debugging unintended bugs.
+
+Here we will use the built-in [unittest](https://docs.python.org/3/library/unittest.html) and [pytest](https://docs.pytest.org/en/latest/) here. Install it with
+{format: bash, line-numbers: false}
+```
+pip install pytest
+```
+
+Flask provides a test client ready to be used for testing. For our simple routes, checking status code and response text are sufficient. Here is the complete test file
+
+{format: python, line-numbers: false, caption: "test.py"}
+```
+import unittest
+from app import app
+
+class AppTest(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        self.app = app.test_client()
+
+    def test_hello(self):
+        response = self.app.get('/hello')
+        assert response.status_code == 200
+        assert response.get_data(as_text=True) == 'Hello'
+
+    def test_specific_hello(self):
+        response = self.app.get('/hello/dummy')
+        assert response.status_code == 200
+        assert response.get_data(as_text=True) == 'Hello dummy'
+    
+    def test_double(self):
+        response = self.app.get('/double/2')
+        assert response.status_code == 200
+        assert response.get_data(as_text=True) == 'Double of 2 is 4'
+    
+    def test_double_wrong_type(self):
+        response = self.app.get('/double/two')
+        assert response.status_code == 404
+    
+    def test_old_hello(self):
+        response = self.app.get('/old_hello')
+        assert response.status_code == 302
+        assert response.location.endswith('/hello')
+
+    def test_custom_code(self):
+        response = self.app.get('/custom_code')
+        assert response.status_code == 201
+        assert response.get_data(as_text=True) == 'custom code'
+```
+
+Run the test with
+
+{format: bash, line-numbers: false}
+```
+pytest test.py
+```

@@ -4,12 +4,14 @@
 ## Setup
 Install [Python](https://www.python.org/). Python 3.5+ is recommended.
 Create a virtualenv for the project (this is included with Python 3.5+)
+
 {format: bash, line-numbers: false}
 ```
 virtualenv venv
 source venv/bin/activate
 ```
 Install Flask
+
 {format: bash, line-numbers: false}
 ```
 pip install Flask
@@ -17,6 +19,7 @@ pip install Flask
 
 ## Hello World Application
 Create a minimal Flask app with the file `app.py` in your favorite editor
+
 {format: python, line-numbers: false, caption: "app.py"}
 ```
 from flask import Flask
@@ -28,6 +31,7 @@ def hello_world():
 ```
 Here we create a Flask app instance, and an index route (`/` or `/index`) which returns a simple string.
 Run the app with
+
 {format: bash, line-numbers: false}
 ```
 FLASK_APP=app.py flask run
@@ -37,12 +41,14 @@ Visit <http://127.0.0.1:5000/>, you should the hello world text displayed.
 
 ## Developer notes
 The default port number for Flask is 5000. You can specify different port, such as 8000, with
+
 {format: bash, line-numbers: false}
 ```
 FLASK_APP=app.py flask run -p 8000
 ```
 
 During development, it is useful to run Flask with debug mode. The server restarts whenever you make code changes, and the traceback will be displayed in the browser whenever an error occurs.
+
 {format: bash, line-numbers: false}
 ```
 FLASK_APP=app.py FLASK_DEBUG=1 flask run
